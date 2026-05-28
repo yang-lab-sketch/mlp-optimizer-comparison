@@ -1,5 +1,7 @@
 # MLP Optimizer Comparison — MNIST
 
+——***yang-lab-sketch***
+
 > 项目：基于不同一阶优化算法的多层感知机训练与对比研究  
 > 实现：Python + NumPy（手写前向/反向传播，无深度学习框架）
 
@@ -7,14 +9,12 @@
 
 ## 一、项目简介
 
-本项目使用 **NumPy 手撸一个两层 MLP**，在 MNIST 数据集上
-分别使用 SGD、Momentum、Nesterov、RMSProp、Adam 等优化器进行训练，
-对比其收敛速度、损失曲线及测试集准确率。
+本项目使用 **NumPy 手撸一个两层 MLP**，在 MNIST 数据集上分别使用 SGD、Momentum、Adam 等优化器进行训练，对比其损失曲线及测试集准确率。
 
 ---
 
 ## 二、项目结构
-
+```
 mlp-optimizer-comparison/
 ├── data/
 │   └── load_mnist.py          # 自动下载并加载 MNIST（sklearn）
@@ -24,8 +24,6 @@ mlp-optimizer-comparison/
 │   ├── base.py                # Optimizer 基类
 │   ├── sgd.py
 │   ├── momentum.py
-│   ├── nesterov.py
-│   ├── rmsprop.py
 │   └── adam.py
 ├── losses/
 │   └── cross_entropy.py       # Softmax + Cross Entropy + 梯度
@@ -37,17 +35,19 @@ mlp-optimizer-comparison/
 ├── results/                   # 实验曲线、日志
 ├── requirements.txt
 └── README.md
+```
 
 ---
 
 ## 三、环境依赖
 
-- Python >= 3.8
-- numpy
-- scikit-learn
-- matplotlib
+- python==3.10
+- numpy==1.24.4
+- scikit-learn==1.7.2
+- matplotlib>=3.7
+- scipy>=1.10
 
-安装：
+---
 
 ## 四、项目详情
 
@@ -166,3 +166,40 @@ v_t &= \beta_2 v_{t-1} + (1 - \beta_2)\, g_t^2 \\[4pt]
 
   通常取 $\beta_1 = 0.9,\; \beta_2 = 0.999,\; \varepsilon = 10^{-8}$
   既保留惯性加速与振荡抑制，又对不同参数自动调整步长，是对 SGD → Momentum 的系统改进。
+
+---
+
+## 五、实验结果
+
+- **SGD**
+![](results/loss_sgd.png)
+
+![](results/accuracy_sgd.png)
+
+![](results/confusion_matrix_sgd.png)
+
+![](results/sgd.png)
+
+- **momentum**
+![](results/loss_momentum.png)
+
+![](results/accuracy_momentum.png)
+
+![](results/confusion_matrix_momentum.png)
+
+![](results/momentum.png)
+
+- **adam**
+![](results/loss_adam.png)
+
+![](results/accuracy_adam.png)
+
+![](results/confusion_matrix_adam.png)
+
+![](results/adam.png)
+
+---
+
+## 六、实验结论
+
+**从详细数据来看，loss：adam < momentum < sgd，acc：adam > momentum > sgd**
