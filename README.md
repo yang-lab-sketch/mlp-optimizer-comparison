@@ -104,67 +104,35 @@ def load_mnist(normalize=True, flatten=True, test_size=0.2, random_state=42):
 可以对应mlp.py这份代码及其注释，以下提供核心部分代码及注释
 
 - 前向传播：
-$$
-\begin{aligned}
-Z^{(1)} &= X W^{(1)} + b^{(1)} \\[4pt]
-A^{(1)} &= \max(0,\; Z^{(1)}) \\[4pt]
-Z^{(2)} &= A^{(1)} W^{(2)} + b^{(2)} \\[4pt]
-\hat{y} &= \text{softmax}(Z^{(2)})
-\end{aligned}
-$$
+
+![](formula/forwards.png)
 
 - 交叉熵损失：
-$$
-L = -\frac{1}{N} \sum_{i=1}^{N} \log \hat{y}_{i,\,y_i}
-$$
+
+![](formula/loss.png)
 
 - 反向传播
-$$
-\begin{aligned}
-\frac{\partial L}{\partial Z^{(2)}} &= \frac{1}{N}\big(\hat{y} - \mathbf{1}_y\big) \\[6pt]
-\frac{\partial L}{\partial W^{(2)}} &= {A^{(1)}}^\top \frac{\partial L}{\partial Z^{(2)}},\quad
-\frac{\partial L}{\partial b^{(2)}} = \sum_i \frac{\partial L}{\partial Z^{(2)}}_i \\[6pt]
-\frac{\partial L}{\partial A^{(1)}} &= \frac{\partial L}{\partial Z^{(2)}}{(W^{(2)})}^\top \\[6pt]
-\frac{\partial L}{\partial W^{(1)}} &= X^\top \Big( \frac{\partial L}{\partial A^{(1)}} \odot \mathbb{1}(Z^{(1)}>0) \Big),\quad
-\frac{\partial L}{\partial b^{(1)}} = \sum_i \Big( \frac{\partial L}{\partial A^{(1)}}_i \odot \mathbb{1}(Z^{(1)}>0)_i \Big)
-\end{aligned}
-$$
+
+![](formula/backwards.png)
 
 ### （3）优化器
 
 优化器本质上在解决一个问题，怎么优化反向传播计算得到的梯度，并更新参数，让loss往小的方向走
 
 - SGD随机梯度下降：
-\[
-\theta_{t+1} = \theta_t - \eta \, g_t
-\]
 
-其中 $g_t = \dfrac{\partial L}{\partial \theta_t}$，$\eta$ 为学习率
+![](formula/sgd.png)
 
 - momentum动量法：
-\[
-\begin{aligned}
-v_t &= \beta v_{t-1} + (1 - \beta)\, g_t \\[4pt]
-\theta_{t+1} &= \theta_t - \eta \, v_t
-\end{aligned}
-\]
 
-  其中 $v_t$ 为速度（累积梯度方向），$\beta \in [0,1)$ 通常为 $0.9$
-  理论分析：从损失函数等高线图角度来看，同心椭圆沿着长轴方向梯度平缓（等高线稀疏），沿着短轴方向梯度急剧（等高线密集），动量法改变了sgd一个方向走到底的策略，而是作了方向的拆分，理论上由于sgd
+![](formula/momentum.png)
+
+  理论分析：从损失函数等高线图角度来看，同心椭圆沿着长轴方向梯度平缓（等高线稀疏），沿着短轴方向梯度急剧（等高线密集），动量法改变了sgd一个方向走到底的策略，而是作了方向的拆分，理论上优于sgd
 
 - Adam
-\[
-\begin{aligned}
-m_t &= \beta_1 m_{t-1} + (1 - \beta_1)\, g_t \\[4pt]
-v_t &= \beta_2 v_{t-1} + (1 - \beta_2)\, g_t^2 \\[4pt]
-\hat{m}_t &= \dfrac{m_t}{1 - \beta_1^t}, \quad
-\hat{v}_t = \dfrac{v_t}{1 - \beta_2^t} \\[4pt]
-\theta_{t+1} &= \theta_t -
-\eta \,\frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \varepsilon}
-\end{aligned}
-\]
 
-  通常取 $\beta_1 = 0.9,\; \beta_2 = 0.999,\; \varepsilon = 10^{-8}$
+![](formula/adam.png)
+
   既保留惯性加速与振荡抑制，又对不同参数自动调整步长，是对 SGD → Momentum 的系统改进。
 
 ---
