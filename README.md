@@ -140,6 +140,7 @@ def load_mnist(normalize=True, flatten=True, test_size=0.2, random_state=42):
 ## 五、实验结果
 
 - **SGD**
+
 ![](results/loss_sgd.png)
 
 ![](results/accuracy_sgd.png)
@@ -149,6 +150,7 @@ def load_mnist(normalize=True, flatten=True, test_size=0.2, random_state=42):
 ![](results/sgd.png)
 
 - **momentum**
+
 ![](results/loss_momentum.png)
 
 ![](results/accuracy_momentum.png)
@@ -158,6 +160,7 @@ def load_mnist(normalize=True, flatten=True, test_size=0.2, random_state=42):
 ![](results/momentum.png)
 
 - **adam**
+
 ![](results/loss_adam.png)
 
 ![](results/accuracy_adam.png)
